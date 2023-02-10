@@ -10,7 +10,7 @@ for i in range(100):
     # print(ims[0:30, i])
     ims[0:30, i] = (0, 0, 255)
 img2 = cv2.transpose(ims)
-img2 = cv2.cvtColor(ims, cv2.COLOR_RGB2HSV)
+img2 = cv2.cvtColor(ims, cv2.COLOR_RGB2HLS)
 cv2.imshow("anh goc", img2)
 cv2.waitKey(0)
 cv2.destroyWindows()
