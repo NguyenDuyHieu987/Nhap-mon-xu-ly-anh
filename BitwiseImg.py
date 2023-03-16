@@ -22,24 +22,24 @@
 # cv2.destroyWindows()
 
 
-# import numpy as np
-# import cv2
+import numpy as np
+import cv2
 
 
-# # draw a rectangle
-# rectangle = np.zeros((300, 300), dtype="uint8")
-# cv2.rectangle(rectangle, (100, 100), (200, 200), 255, -1)
+# draw a rectangle
+rectangle = np.zeros((300, 300), dtype="uint8")
+cv2.rectangle(rectangle, (100, 100), (200, 200), 255, -1)
 
-# # draw a circle
-# circle = np.zeros((300, 300), dtype="uint8")
-# cv2.circle(circle, (150, 150), 60, 255, -1)
+# draw a circle
+circle = np.zeros((300, 300), dtype="uint8")
+cv2.circle(circle, (150, 150), 60, 255, -1)
 
-# bitwiseAnd = cv2.bitwise_and(rectangle, circle)
-# bitwiseOr = cv2.bitwise_or(rectangle, circle)
+bitwiseAnd = cv2.bitwise_and(rectangle, circle)
+bitwiseOr = cv2.bitwise_or(rectangle, circle)
 
-# cv2.imshow("AND", bitwiseAnd)
-# cv2.imshow("OR", bitwiseOr)
+cv2.imshow("AND", bitwiseAnd)
+cv2.imshow("OR", bitwiseOr)
 
 
-# cv2.waitKey(0)
-# cv2.destroyWindows()
+cv2.waitKey(0)
+cv2.destroyAllWindows()
