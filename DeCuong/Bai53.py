@@ -1,18 +1,15 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 img = cv2.imread("Images/628548.jpg")
 ims = cv2.resize(img, [640, 480])
 
 img_gray = cv2.cvtColor(ims, cv2.COLOR_BGR2GRAY)
-
-t_lower = 50  # Mức ngưỡng dưới
-t_upper = 150  # Mức ngưỡng trên
-
-img_canny = cv2.Canny(img_gray, t_lower, t_upper, L2gradient=True)
-cv2.imshow("Canny", img_canny)
-cv2.imshow("anh goc", ims)
+print("min:", img_gray.min())
+print("max:", img_gray.max())
+print("avg:", img_gray.mean())
 
 
 cv2.waitKey(0)

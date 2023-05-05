@@ -7,12 +7,11 @@ ims = cv2.resize(img, [640, 480])
 
 img_gray = cv2.cvtColor(ims, cv2.COLOR_BGR2GRAY)
 
-t_lower = 50  # Mức ngưỡng dưới
-t_upper = 150  # Mức ngưỡng trên
+sobelx = cv2.Sobel(img_gray, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=5)
+sobely = cv2.Sobel(img_gray, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=5)
 
-img_canny = cv2.Canny(img_gray, t_lower, t_upper, L2gradient=True)
-cv2.imshow("Canny", img_canny)
-cv2.imshow("anh goc", ims)
+cv2.imshow("Sobel x", sobelx)
+cv2.imshow("Sobel y", sobely)
 
 
 cv2.waitKey(0)
