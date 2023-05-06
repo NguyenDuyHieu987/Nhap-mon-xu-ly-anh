@@ -25,7 +25,8 @@ img_canny = cv2.Canny(Igray, 100, 200, L2gradient=True)
 cv2.imshow("Igray canny", img_canny)
 print(img_canny[100, 120] == 1)
 
-ret, Ib = cv2.threshold(Igray, 0, 255, cv2.THRESH_OTSU)
+ret, Ib = cv2.threshold(Igray, 123, 255, cv2.THRESH_OTSU)
+print(ret)
 contours, hierarchy = cv2.findContours(Ib, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 areas = [cv2.contourArea(cnt) for cnt in contours]
 max_area = np.argmax(areas)

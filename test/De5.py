@@ -16,6 +16,7 @@ print(Igray)
 cv2.imshow("Igray", Igray)
 
 ret, Ib = cv2.threshold(Igray, 0, 255, cv2.THRESH_OTSU)
+print(ret)
 cv2.imshow("THRESH_OTSU", Ib)
 
 img_blur = cv2.blur(Igray, (5, 5))

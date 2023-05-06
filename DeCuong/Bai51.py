@@ -28,7 +28,7 @@ if len(contours) != 0:
     max_index = np.argmax(areas)
 
     for contour in contours:
-        if cv2.arcLength(contour, True) > (max_index / (5)):
+        if cv2.contourArea(contour) > (max_index / (5)):
             cv2.drawContours(ims2, [contour], -1, (0, 255, 255), 3)
 
     cv2.imshow("contours max", ims2)
