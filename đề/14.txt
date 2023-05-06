@@ -1,0 +1,56 @@
+1. (2 điểm) Hiển thị kênh ảnh B của I.
+2. (4 điểm) Chuyển ảnh sang biểu diễn HSV được ma trận Ihsv. Hiển thị kênh V của Ihsv. Xác định giá trị mức sáng trung bình của kênh S của ảnh Ihsv.
+3. (1 điểm) Xác định và vẽ histogram của kênh V của ảnh Ihsv.
+4. (1.5 điểm) Làm trơn ảnh kênh S của Ihsv theo bộ lọc trung bình cộng, kích thước cửa sổ lân cận là 5x5 được ảnh Is. Hiển thị ảnh Is.
+5. (1.5 điểm) Xác định đường contour có tỉ lệ giữa chu vi và diện tích là lớn nhất của ảnh Ib. Vẽ đường contour trên ảnh gôc I Hiển thị ảnh I
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+I = cv2.imread("hat1.PNG")
+cv2.imshow("Kenh B cua anh I", I[:,:,0])
+
+Ihsv = cv2.cvtColor(I, cv2.COLOR_BGR2HSV)
+cv2.imshow("Kenh V cua Ihsv", Ihsv[:,:,2])
+
+light_avg = np.mean(Ihsv[:,:,1])
+print("TB S", light_avg)
+
+
+def tinh_his(Ihsv):
+    h = Ihsv.shape[0]
+    w = Ihsv.shape[1]
+    mang_hist = np.zeros(256, dtype = "int")
+    for i in range(h):
+        for j in range(w):
+            g = Ihsv[i][j]
+            mang_hist[g] = mang_hist[g] + 1
+    return mang_hist
+Ihsv = I[:,:,2]
+hist_r = tinh_his(Ihsv)
+plt.plot(hist_r)
+plt.show()
+
+Ihsv_ = I[:,:,1]
+matran_trongso = np.ones((5,5), np.float32)/49
+Is = cv2.filter2D(Ihsv_,-1,matran_trongso)
+cv2.imshow("Loc trung binh cong 5x5", Is)
+
+Ig = cv2.cvtColor(I, cv2.COLOR_BGR2GRAY)
+
+thresh, Ib = cv2.threshold(Ig, 0, 255, cv2.THRESH_OTSU)
+
+contours, _ = cv2.findContours(Ib, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+max_per = 0.0
+for cnt in contours:
+    if max_per <= cv2.arcLength(cnt, True):
+        max_per = cv2.arcLength(cnt, True)
+        contour_max = cnt
+cv2.drawContours(I, [contour_max], -1, (0, 255, 255), 2)
+cv2.imshow('chu vi contour', I) # vàng
+
+
+cv2.waitKey(0)
+

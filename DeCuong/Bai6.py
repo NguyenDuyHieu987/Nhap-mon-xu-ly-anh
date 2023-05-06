@@ -13,7 +13,9 @@ Igray = cv2.cvtColor(ims, cv2.COLOR_BGR2GRAY)
 Igray[:, :] = 0.39 * r + 0.5 * g + 0.11 * b
 
 cv2.imshow("img gray", Igray)
-print(np.mean(Igray))
+# print(np.mean(Igray))
+print(Igray.mean())
+
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

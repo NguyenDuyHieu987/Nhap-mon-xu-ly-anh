@@ -1,0 +1,63 @@
+1. (2 điểm) Hiển thị kênh B của ảnh I.
+2. (4 điểm) Chuyển ảnh sang biểu diễn HSV được ma trận Ihsv. Hiển thị kênh H của Ihsv. Xác định giá trị mức sáng trung bình của kênh S của ảnh Ihsv.
+3. (1 điểm) Xác định và vẽ histogram của kênh S của ảnh Ihsv.
+4. (1.5 điểm) Làm trơn ảnh kênh V của Ihsv theo bộ lọc trung bình cộng, kích thước cửa sổ lân cận là 3x3 được ảnh Is. Hiển thị các giá trị mức xám trong lân cận 5x5 của điểm ảnh có tọa độ dòng y=9, cột x=11.
+5. (1.5 điểm) Nhị phân hóa ảnh Is theo ngưỡng Otsu được ảnh nhị phân Ib.
+Xác định đường contour có chu vi lớn nhất của ảnh Ib. Vẽ đường contour đó trên ảnh gôc I
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+print("Đọc ảnh")
+I = cv2.imread("hat1.png")
+cv2.imshow('Ảnh gốc',I)
+
+Ihsv = cv2.cvtColor(I,cv2.COLOR_BGR2HSV)
+cv2.imshow('kenh H',Ihsv[:,:,0])
+print("Muc xam trung binh kenh S",np.mean(Ihsv[:,:,1]))
+
+def tinh_his(Ihsv):
+    h = Ihsv.shape[0]
+    w = Ihsv.shape[1]
+    mang_hist = np.zeros(256, dtype = "int")
+    for i in range(h):
+        for j in range(w):
+            g = Ihsv[i][j]
+            mang_hist[g] = mang_hist[g] + 1
+    return mang_hist
+
+matran_trongso= np.ones((3,3),np.float32)/9
+Is = cv2.filter2D(Ihsv[:,:,2],-1,matran_trongso)
+cv2.imshow('loc trung binh cong 3x3',Is)
+
+Ihsv_S = I[:,:,1]
+hist_r = tinh_his(Ihsv_S)
+plt.plot(hist_r)
+plt.show()
+
+
+y = 9
+x = 11
+height = Is.shape[0]
+width = Is.shape[1]
+for k in range(-1, 2):
+  for l in range(-1, 2):
+    if ((y + k) >= 0) & ((y + k) <= height - 1) & ((x + l) >= 0) & ((x + l) <= width - 1):
+      print("Các mức độ xám của cửa sổ lân cận 3x3 điểm ảnh Ihsv(y="+str(y)+",x="+str(x)+")",Is[y + k, x + l])
+
+Ig = cv2.cvtColor(I, cv2.COLOR_BGR2GRAY)
+
+thresh, Ib = cv2.threshold(Ig, 0, 255, cv2.THRESH_OTSU)
+
+contours, _ = cv2.findContours(Ib, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+max_per = 0.0
+for cnt in contours:
+    if max_per <= cv2.arcLength(cnt, True):
+        max_per = cv2.arcLength(cnt, True)
+        contour_max = cnt
+cv2.drawContours(I, [contour_max], -1, (0, 255, 255), 2)
+cv2.imshow('chu vi contour', I) # vàng
+
+cv2.waitKey(0)

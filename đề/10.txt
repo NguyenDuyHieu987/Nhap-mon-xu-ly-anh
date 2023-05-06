@@ -1,0 +1,59 @@
+1. (2 điểm) Hiển thị kênh B của ảnh I.
+2. (4 điểm) Chuyển ảnh sang biểu diễn HSV được ma trận Ihsv. Hiển thị kênh S của Ihsv. Xác định giá trị mức sáng trung bình của kênh V của ảnh Ihsv.
+3. (1 điểm) Làm trơn ảnh kênh S của Ihsv theo bộ lọc trung bình cộng, kích thước cửa sổ lân cận là 5x5 được ảnh Is. Hiển thị ảnh Is.
+4. (1.5 điểm) Nhị phân hóa ảnh Is theo ngưỡng Otsu được ảnh nhị phân Ib.
+Xác định đường contour có chu vi lớn nhất của ảnh Ib. Vẽ đường contour trên ảnh I.
+5. (1.5 điểm) Tăng độ sáng của kênh V của ảnh Ihsv bằng phương pháp giãn tuyến tính các giá trị mức xám. Biến đổi ngược ảnh Ihsv về biểu diễn mầu RGB được ảnh I. Hiển thị lại ảnh I.
+
+import cv2
+import numpy as np
+
+I = cv2.imread('anh4.jpg')
+cv2.imshow('anh goc',I)
+#1
+cv2.imshow('kenh B',I[:,:,0])
+#2
+Ihsv = cv2.cvtColor(I,cv2.COLOR_BGR2HSV)
+cv2.imshow('kenh S',Ihsv[:,:,1])
+#muc sang trung binh kenh V
+print(np.mean(Ihsv[:,:,2]))
+#3
+matran_trongso= np.ones((5,5),np.float32)/25
+Is = cv2.filter2D(Ihsv[:,:,0],-1,matran_trongso)
+cv2.imshow('loc trung binh cong 5x5',Is)
+#4
+Ig = cv2.cvtColor(I, cv2.COLOR_BGR2GRAY)
+
+thresh, Ib = cv2.threshold(Ig, 0, 255, cv2.THRESH_OTSU)
+
+contours, _ = cv2.findContours(Ib, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+max_per = 0.0
+for cnt in contours:
+    if max_per <= cv2.arcLength(cnt, True):
+        max_per = cv2.arcLength(cnt, True)
+        contour_max = cnt
+cv2.drawContours(I, [contour_max], -1, (0, 255, 255), 2)
+cv2.imshow('chu vi contour', I) # vàng
+
+#5
+def muc_xam(X):
+    w = X.shape[1]
+    h = X.shape[0]
+    Ir = X
+    a = Ir[0][0]
+    b = Ir[0][0]
+    for i in range(h):
+        for j in range(w):
+            if a > Ir[i][j]:
+                a=Ir[i][j]
+            if b < Ir[i][j]:
+                b=Ir[i][j]
+    for i in range(h):
+        for j in range(w):
+            Ir[i][j] = (255 * int(Ir[i][j] - a))//(b-a)
+    return Ir
+Ihsv[:,:,2] = muc_xam(Ihsv[:,:,2])
+I2 = cv2.cvtColor(Ihsv,cv2.COLOR_HSV2RGB)
+cv2.imshow('doilai anh',I2)
+cv2.waitKey()

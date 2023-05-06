@@ -1,0 +1,42 @@
+Đọc ảnh mầu I04.jpg vào biến ma trận I.
+1. (2 điểm) Hiển thị tỷ lệ giữa giá trị độ cao và độ rông của ảnh I.
+2. (4 điểm) Hiệu chỉnh lại ảnh I với size mới là độ cao 256, độ rộng 256 được ảnh mới I2. Hiển thị ảnh I2.
+3. (1 điểm) Chuyển đôi ảnh I sang ảnh HSV được ma trận ảnh Ihsv. Hiển thị kênh S của ảnh Ihsv.
+4. (1.5 điểm) Xác định biên theo phương pháp Canny của kênh V của ảnh Ihsv được ảnh nhị phân Ivb.
+5. (1.5 điểm) Xác định histogram của kênh S của ảnh Ihsv
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+I = cv2.imread("I04.jpg")
+
+# 1. (2 điểm) Hiển thị tỷ lệ giữa giá trị độ cao và độ rông của ảnh I.
+h = I.shape[0]
+w = I.shape[1]
+print("Tỷ lệ giữa giá trị độ cao và độ rộng", h/w)
+
+# 2. (4 điểm) Hiệu chỉnh lại ảnh I với size mới là độ cao 256, độ rộng 256 được ảnh mới I2. Hiển thị ảnh I2.
+I2 = cv2.resize(I, (256, 256))
+cv2.imshow("Anh moi", I2)
+
+# 3. (1 điểm) Chuyển đôi ảnh I sang ảnh HSV được ma trận ảnh Ihsv. Hiển thị kênh S của ảnh Ihsv.
+Ihsv = cv2.cvtColor(I, cv2.COLOR_BGR2HSV)
+cv2.imshow("Kenh S cua anh Ihsv", Ihsv[:,:,1])
+
+# 4. (1.5 điểm) Xác định biên theo phương pháp Canny của kênh V của ảnh Ihsv được ảnh nhị phân Ivb.
+Ivb = cv2.Canny(Ihsv[:,:,2],0, 255)
+cv2.imshow("Anh nhi phan Canny", Ivb)
+
+# 5. (1.5 điểm) Xác định histogram của kênh S của ảnh Ihsv.
+Ihsv_defHist = cv2.calcHist(
+    [Ihsv],
+    mask = None,
+    channels= [1],
+    histSize = [255],
+    ranges = [0,255],
+)
+plt.plot(Ihsv_defHist)
+plt.show()
+
+cv2.waitKey()

@@ -1,0 +1,48 @@
+Đọc ảnh mầu the_cancuoc_congdan.jpg vào biến ma trận I.
+1. (2 điểm) Hiển thị kênh B của ảnh I.
+2. (4 điểm) Chuyển ảnh mầu I sang ảnh đa cấp xám (grayscale) theo công thức xác định mức độ xám từ tổ hợp các thành phần mầu (r,g,b) theo tỷ lệ (0.39,0.5,0.11),
+được ma trận ảnh Ig. Hiển thị ảnh Ig.
+3. (1 điểm). Chuyển ảnh Ig sang ảnh nhị phân Ib với ngưỡng Otsu.
+4. (1.5 điểm). Làm trơn ảnh Ig theo bộ lọc trung bình cộng với lân cận cửa sổ kích thước 5x5 thu được ảnh Im.
+5. (1.5 điểm). Xác định các contour của ảnh Im và vẽ vị trí các contour lên ảnh gốc I ban đầu.
+
+import cv2
+import numpy as np
+
+I = cv2.imread('the_cancuoc_congdan.jpg')
+cv2.imshow(kenh B , I[,,0])
+
+Ig=0.39I[,,2] + 0.5I[,,1]+0.11I[,,0]
+Ig_show = Ig.astype('uint8')
+
+cv2.imshow(Gray ,Ig_show)
+
+nguongotsu, Ib = cv2.threshold(Ig_show, 0, 255, cv2.THRESH_OTSU)
+cv2.imshow(anh nhi phan,Ib)
+
+matran_trongso= np.ones((5,5),np.float32)25
+Im = cv2.filter2D(I,-1,matran_trongso)
+cv2.imshow('loc trung binh cong 5x5',Im)
+
+
+# tìm Canny edges
+edged = cv2.Canny(Im.astype(np.uint8), 30, 200)
+
+  
+# tìm  Contours
+
+contours, hierarchy = cv2.findContours(edged, 
+    cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+#  Hiện thị  contour của ảnh Im  
+cv2.imshow(Conter,edged)
+
+  
+print(Số lượng contours trên Im =  + str(len(contours)))
+  
+# Vẽ lên ảnh gốc I
+# -1 là biểu diễn việc vẽ tất cả các đường viền trên ảnh gốc I
+x= cv2.drawContours(I, contours, -1, (0, 255, 0), 3)
+  
+cv2.imshow(Ve len anh goc,I)
+
+cv2.waitKey()

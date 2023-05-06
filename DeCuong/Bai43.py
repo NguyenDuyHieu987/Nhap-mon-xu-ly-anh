@@ -1,3 +1,5 @@
+#  giãn tuyến tính các giá trị mức xám.
+
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
@@ -32,7 +34,7 @@ cv2.imshow("v chanel", v_new)
 img_hsv = cv2.merge([h, s, v_new])
 cv2.imshow("img hsv", img_hsv)
 
-img_rgb = cv2.cvtColor(img_hsv, cv2.COLOR_HSV2BGR)
+img_rgb = cv2.cvtColor(img_hsv, cv2.COLOR_HSV2RGB)
 cv2.imshow("img rgb", img_rgb)
 
 

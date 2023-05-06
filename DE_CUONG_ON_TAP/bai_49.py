@@ -1,5 +1,4 @@
-
-# 49 Xác định các đường contour của ảnh Ib, tìm giá trị max_cv là chu vi lớn nhất trong các contour trên. 
+# 49 Xác định các đường contour của ảnh Ib, tìm giá trị max_cv là chu vi lớn nhất trong các contour trên.
 # Vẽ các contours có chu vi lớn nhất lên ảnh gốc I với mầu vàng bgr = (0, 255, 255). Hiển thị ảnh I.
 
 
@@ -18,6 +17,7 @@ cv2.imshow("anh xam", Ig)
 
 ret, Ib = cv2.threshold(Ig, 90, 255, cv2.THRESH_OTSU)
 cv2.imshow("anh nhi phan theo otsu", Ib)
+
 
 contours, hierarchy = cv2.findContours(Ib, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 

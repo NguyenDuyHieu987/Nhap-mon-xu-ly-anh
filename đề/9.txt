@@ -1,0 +1,78 @@
+1. (2 điểm) Hiển thị ảnh I.
+2. (4 điểm) Chuyển ảnh sang biểu diễn HSV được ma trận Ihsv. Hiển thị kênh S của Ihsv. Xác định giá trị mức sáng lớn nhất của kênh V của ảnh Ihsv.
+3. (1 điểm) Làm trơn ảnh kênh V của Ihsv theo bộ lọc trung bình cộng, kích thước cửa sổ lân cận là 3x3 được ảnh Iv. Hiển thị ảnh Iv.
+5. (1.5 điểm) Xác định đường contour có chu vi lớn nhất của ảnh Ib. Vẽ đường contour trên ảnh gốc I.
+6. (1.5 điểm) Tăng độ sáng của kênh V của ảnh Ihsv bằng phương pháp cân bằng histogram. Biến đổi ngược ảnh Ihsv về biểu diễn mầu RGB được ảnh I.
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+I = cv2.imread("anh5.jpg")
+
+cv2.imshow("Anh goc",I)
+Ihsv=cv2.cvtColor(I,cv2.COLOR_BGR2HSV)
+
+print("Muc sng lon nhat knh V ",np.max(Ihsv[:,:,2]))
+cv2.imshow("Anh kenh S",Ihsv[:,:,1])
+
+matran_trongso= np.ones((3,3),np.float32)/9
+Iv = cv2.filter2D(Ihsv[:,:,2],-1,matran_trongso)
+cv2.imshow('loc trung binh cong 3x3',Iv)
+
+Ig = cv2.cvtColor(I, cv2.COLOR_BGR2GRAY)
+
+thresh, Ib = cv2.threshold(Ig, 0, 255, cv2.THRESH_OTSU)
+
+contours, _ = cv2.findContours(Ib, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+max_per = 0.0
+for cnt in contours:
+    if max_per <= cv2.arcLength(cnt, True):
+        max_per = cv2.arcLength(cnt, True)
+        contour_max = cnt
+cv2.drawContours(I, [contour_max], -1, (0, 255, 255), 2)
+cv2.imshow('chu vi contour', I) # vàng
+
+
+IV = cv2.equalizeHist(Ihsv[:,:,2])
+# hist = cv2.calcHist ([IV], [0],None,[256],[0,256])
+# plt.plot(hist)
+# plt.show()
+
+
+# def tinh_his(img):
+
+#     hist = np.zeros((256,), np.uint8)
+
+#     h, w = img.shape[:2]
+
+#     for i in range(h):
+
+#         for j in range(w):
+
+#             hist[img[i][j]] += 1
+
+#     return hist
+
+# Iv=Ihsv[:,:,2]
+Is=Ihsv[:,:,1]
+Ih=Ihsv[:,:,0]
+# h2 = np.histogram(Ig.ravel(), bins=256, range=[0,256])
+
+
+
+w=I.shape[1]
+h=I.shape[0]
+I_moi=np.zeros((h,w,3),dtype='uint8')
+
+I_moi[:,:,2]= IV
+I_moi[:,:,1]=Is
+I_moi[:,:,0] = Ih
+cv2.imshow("ANh hsv mơi",I_moi) 
+
+I2 = cv2.cvtColor(I_moi, cv2.COLOR_HSV2BGR)
+cv2.imshow('Covert to BGR', I2)
+
+
+cv2.waitKey()

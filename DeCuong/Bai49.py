@@ -15,7 +15,8 @@ ims3 = ims.copy()
 contours, hierarchy = cv2.findContours(ims1, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
 if len(contours) != 0:
-    cv2.drawContours(ims, contours, -1, 255, 3)
+    # cv2.drawContours(ims, contours, -1, 255, 3)
+    # cv2.drawContours(ims, contours, -1, (0, 255, 255), 3)
 
     # cnt = contours[0]
     # areas = [cv2.contourArea(c) for c in contours]
@@ -29,7 +30,7 @@ if len(contours) != 0:
 
     cv2.drawContours(ims2, contours[max_index], -1, (0, 255, 255), 3)
 
-    cv2.imshow("contours max", ims2)
+    cv2.imshow("contours max", ims)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
